@@ -29,6 +29,7 @@ public class WeatherReport {
 
     // Precipitation
     public int precipitation_probability;
+    public boolean is_snow;
 
     // Summary
     public String summary;
@@ -38,11 +39,11 @@ public class WeatherReport {
         return String.format("<WeatherReport(coords: %s, " +
                         "temp: %d, temp_feels_like: %d, " +
                         "wind_speed: %d, wind_direction: \"%s\", humidity: %d, dew_point: %d, pressure: %d, " +
-                        "precipitation_probability: %d, summary: \"%s\", timestamp: %s)>",
+                        "precipitation_probability: %d, is_snow: %b, summary: \"%s\", timestamp: %s)>",
                 this.coords.toString(),
                 this.temp, this.temp_feels_like,
                 this.wind_speed, this.wind_direction, this.humidity, this.dew_point, this.pressure,
-                this.precipitation_probability,
+                this.precipitation_probability, this.is_snow,
                 this.summary, this.timestamp.toString());
     }
 }

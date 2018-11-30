@@ -133,6 +133,12 @@ public class DarkSkyForecastService implements IForecastService {
             report.precipitation_probability = (int)(data.get("precipProbability").asDouble() * 100);
         }
 
+        if (data.has("precipType")) {
+            report.is_snow = !data.get("precipType").equals("rain");
+        } else {
+            report.is_snow = false;
+        }
+
         if (data.has("summary")) {
             report.summary = data.get("summary").asText();
         }
