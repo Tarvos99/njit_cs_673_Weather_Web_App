@@ -39,6 +39,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers("/secured-endpoints/**").authenticated()
+                .antMatchers("/users/delete-user/**").authenticated()
+                .antMatchers("/login/**").permitAll()
+//                .anyRequest().authenticated()
 //                .antMatchers("/radar/**").permitAll()
 //                .antMatchers("/temp_maps/**").permitAll()
 //                .antMatchers("/userprofile/**").permitAll()
@@ -51,12 +55,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/realtimeWeatherUpdate/**").permitAll()
                 .antMatchers("/**").permitAll()
 //                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
-                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     }
 
     @Override

@@ -13,6 +13,7 @@ import weatherapp.domain.dbmodel.RealTimeWeatherUpdate;
 import weatherapp.domain.restmodel.RealTimeWeatherUpdateRest;
 import weatherapp.services.RealTimeWeatherUpdateService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class RealTimeWeatherUpdateController {
             throw new RuntimeException("City not sent.");
         }
         List<RealTimeWeatherUpdate> realTimeWeatherUpdate = realTimeWeatherUpdateService.getRealTimeWeatherUpdate(city);
-        List<RealTimeWeatherUpdateRest> collect = realTimeWeatherUpdate.stream().map(RealTimeWeatherUpdateRest::fromReadTimeWeatherUpdate).collect(Collectors.toList());
+        List<RealTimeWeatherUpdateRest> collect = realTimeWeatherUpdate.stream().map(RealTimeWeatherUpdateRest::fromReadTimeWeatherUpdate).sorted(Comparator.comparing(RealTimeWeatherUpdateRest::getZonedDateTimeRest)).collect(Collectors.toList());
         return collect;
     }
 }

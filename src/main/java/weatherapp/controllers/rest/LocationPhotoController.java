@@ -16,6 +16,7 @@ import weatherapp.services.LocationPhotoService;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,6 +54,15 @@ public class LocationPhotoController {
         List<LocationPhoto> locationPhotos = this.locationPhotoService.getLocationPhoto(searchQuery);
         List<LocationPhotoRest> locationPhotoRests = locationPhotos.stream().map(LocationPhotoRest::convertLocationPhotoToLocationPhotoRest).collect(Collectors.toList());
         return locationPhotoRests;
+    }
+
+    @GetMapping(value = "/search-location-photos-sorted", consumes = MediaType.ALL_VALUE)
+    public List<LocationPhotoRest> searchLocationPhotosSorted(@RequestParam("searchquery") String searchQuery) {
+        logger.info(searchQuery);
+        List<LocationPhoto> locationPhotos = this.locationPhotoService.getLocationPhoto(searchQuery);
+        List<LocationPhotoRest> locationPhotoRests = locationPhotos.stream().map(LocationPhotoRest::convertLocationPhotoToLocationPhotoRest).collect(Collectors.toList());
+        List<LocationPhotoRest> sortedCollection = locationPhotoRests.stream().sorted(Comparator.comparing(LocationPhotoRest::getCreationTime)).collect(Collectors.toList());
+        return sortedCollection;
     }
 
     @DeleteMapping(value = "/delete-location-photo/{photoName}", consumes = MediaType.ALL_VALUE)
