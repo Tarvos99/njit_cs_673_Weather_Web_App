@@ -1,0 +1,158 @@
+*
+{
+    margin: 0;
+    padding: 0;     
+}
+table th{
+text-align: center;
+color: white;
+padding: auto;
+}
+table td{
+  background-color: lightblue;
+  border: 1px solid blue;
+  text-align: left;
+  padding: 20px 60px;/*change to auto??*/
+  color: black;
+
+}
+
+table tr:nth-child(odd) td{
+  background-color: green;
+}
+
+h1{
+  color: white;
+
+}
+h2{
+  color: white;
+}
+body{
+
+    background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(indeximage1.jpg);
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+header
+{
+  /*  background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(indeximage1.jpg);*/
+    
+    background-size: cover;
+    background-position: center;
+}
+
+.main-nav1
+{
+   position: absolute;
+    top: 15px;
+    left: 370px;
+    list-style: none;
+}
+
+.main-nav2
+{
+    position: absolute;
+    list-style: none;
+    top: 15px;
+    left: 1040px;
+
+}
+
+.main-nav1 li
+{
+    display: inline-block;
+}
+
+.main-nav2 li
+{
+    display: inline-block;
+}
+.main-nav1 li a
+{
+    color: white;
+    text-decoration: none;
+    padding: 5px 20px;
+    font-family: "Roboto", sans-serif;
+    font-size:  15px;
+}
+.main-nav2 li a
+{
+    color: white;
+    text-decoration: none;
+    padding: 5px 20px;
+    font-family: "Roboto", sans-serif;
+    font-size:  15px;
+}
+/*
+.main-nav li.active a
+{
+    border: 1px solid white;
+
+}
+*/
+.main-nav1 li a:hover
+{
+    border: 1px solid white
+}
+.main-nav2 li a:hover
+{
+    border: 1px solid white
+}
+.logo img
+{
+    width: 60px;
+    height: 62.5px;
+    float: left;
+}
+
+.row1
+{
+    max-width: 1200px;
+    margin: auto;
+}
+
+.searchbar a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    float: left;
+}
+/* Style the search box inside the navigation bar */
+.searchbar input[type=text] {
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    float: left;
+}
+#locationbutton 
+{
+    margin-top: 12px;
+    display: inline-block;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 4px;
+    width: 60px;
+    transition: all 0.5s;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#LocWD
+{
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    font-family: "Times New Roman", serif;
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}

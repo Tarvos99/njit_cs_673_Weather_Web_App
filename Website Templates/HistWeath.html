@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Historical Weather Data
+        </title>
+        <link href="HistWeathStyle.css" rel="stylesheet" type="text/css">
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    </head>
+    <body>
+      <header>
+          <div class="row">
+              <div>
+                  <div class="logo">
+                  <img src="logo.png">
+                  </div>
+              </div>
+              <div class="searchbar">
+                <input type="text" placeholder="Location" id="locationbar">
+                <input type="text" placeholder="Date (Month Day, Year)" id="datebar">
+                <button id="locationbutton" onclick="myFunction()"> Search</button>
+              </div>
+          </div>
+          <div>
+          <ul class="main-nav1">
+              
+          </ul>
+          <ul class="main-nav2">
+				<li class="active"><a href="index.html"> HOME </a></li>
+          </ul>
+          </div>
+           <p id="LocWD"></p>
+            <script>
+			var temperatures = {};
+            var first = true;
+            function addHeader() {
+                var table1 = document.getElementById("table1");
+                var n_tr = document.createElement("tr");
+                var time_td = document.createElement("th");
+                time_td.innerHTML = "Time";
+                var name_td = document.createElement("th");
+                name_td.innerHTML = "Name";
+                var temp_td = document.createElement("th");
+                temp_td.innerHTML = "Temp";
+                var temp_humidity_td = document.createElement("th");
+                temp_humidity_td.innerHTML = "Humidity";
+                var temp_ws_td = document.createElement("th");
+                temp_ws_td.innerHTML = "Wind Speed";
+				var temp_pp_td = document.createElement("th");
+                temp_pp_td.innerHTML = "Precipitation Probability";
+                var temp_feelslike_td = document.createElement("th");
+                temp_feelslike_td.innerHTML = "Temp Feels Like";
+				var temp_summary_td = document.createElement("th");
+                temp_summary_td.innerHTML = "Summary";
+                n_tr.appendChild(name_td);
+                n_tr.appendChild(time_td);
+                n_tr.appendChild(temp_td);
+                n_tr.appendChild(temp_humidity_td);
+                n_tr.appendChild(temp_ws_td);
+				n_tr.appendChild(temp_pp_td);
+                n_tr.appendChild(temp_feelslike_td);
+				n_tr.appendChild(temp_summary_td);
+                table1.appendChild(n_tr);
+            }
+ 
+            function myFunction() {
+                if (first) {
+                    addHeader();
+                    first = false;
+                }
+                
+                var x = document.getElementById("locationbar").value;
+                var y = document.getElementById("datebar").value;
+                var yy= y +" 0:00:00";
+                var myDate = new Date(yy); // Your timezone!
+                var myEpoch = myDate.getTime()/1000.0;                
+                var url = "http://weather-api.sulekha.rocks:8080/historical/" + x+"/" + myEpoch;
+                url = url.trim();
+                $.get(url).then(function (response) {
+                	console.log(response);
+                    var table1 = document.getElementById("table1");
+                    var n_tr = document.createElement("tr");
+                    var name_td = document.createElement("td");
+                    name_td.innerHTML = x;
+                    var time_td = document.createElement("td");
+                    time_td.innerHTML = y;
+                    var temp_td = document.createElement("td");
+                    temp_td.innerHTML = response.report.temp;
+                    var temp_humidity_td = document.createElement("td");
+                    temp_humidity_td.innerHTML = response.report.humidity;
+                    var temp_ws_td = document.createElement("td");
+                    temp_ws_td.innerHTML = response.report.wind_speed;
+                    var temp_pp_td = document.createElement("td");
+                    temp_pp_td.innerHTML = response.report.precipitation_probability;
+                    var temp_feelslike_td = document.createElement("td");
+                    temp_feelslike_td.innerHTML = response.report.temp_feels_like;
+					var temp_summary_td = document.createElement("td");
+                    temp_summary_td.innerHTML = response.report.summary;
+                    n_tr.appendChild(name_td);
+                    n_tr.appendChild(time_td);
+                    n_tr.appendChild(temp_td);
+                    n_tr.appendChild(temp_humidity_td);
+                    n_tr.appendChild(temp_ws_td);
+    				n_tr.appendChild(temp_pp_td);
+                    n_tr.appendChild(temp_feelslike_td);
+    				n_tr.appendChild(temp_summary_td);
+                    table1.appendChild(n_tr);             	             	
+                });
+            }
+        </script>
+
+        <table id="table1">
+        </table>
+      </header>
+    </body>
+</html>
