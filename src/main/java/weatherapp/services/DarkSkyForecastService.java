@@ -28,7 +28,13 @@ public class DarkSkyForecastService implements IForecastService {
 
         ZoneId timezone = ZoneId.of(root.get("timezone").asText());
 
-        return createWeatherReport(root.get("currently"), coords, timezone, false);
+        WeatherReport report = createWeatherReport(root.get("currently"), coords, timezone, false);
+
+        if (root.has("alerts")) {
+            report.alerts = getAlerts(root.get("alerts"));
+        }
+
+        return report;
     }
 
     @Override
@@ -41,7 +47,9 @@ public class DarkSkyForecastService implements IForecastService {
 
         for (int i = 0; i < 24; i++) {
             JsonNode data = root.get("hourly").get("data").get(i);
-            reports.add(i, createWeatherReport(data, coords, timezone, false));
+
+            WeatherReport report = createWeatherReport(data, coords, timezone, false);
+            reports.add(i, report);
         }
 
         return reports;
@@ -57,7 +65,9 @@ public class DarkSkyForecastService implements IForecastService {
 
         for (int i = 0; i < 5; i++) {
             JsonNode data = root.get("daily").get("data").get(i);
-            reports.add(i, createWeatherReport(data, coords, timezone, true));
+
+            WeatherReport report = createWeatherReport(data, coords, timezone, true);
+            reports.add(i, report);
         }
 
         return reports;
@@ -144,5 +154,15 @@ public class DarkSkyForecastService implements IForecastService {
         }
 
         return report;
+    }
+
+    public List<String> getAlerts(JsonNode root) {
+        List<String> alerts = new ArrayList<>();
+
+        for (final JsonNode node : root) {
+            alerts.add(node.get("description").asText());
+        }
+
+        return alerts;
     }
 }

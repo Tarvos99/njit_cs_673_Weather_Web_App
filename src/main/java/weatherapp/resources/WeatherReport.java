@@ -5,6 +5,7 @@ import weatherapp.utils.CoordPair;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class WeatherReport {
     // Metadata
@@ -33,6 +34,7 @@ public class WeatherReport {
 
     // Summary
     public String summary;
+    public List<String> alerts;
 
     @Override
     public String toString() {
