@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        User-Submitted Photo Timeline
+    </title>
+    <link href="timelinestyle.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <header>
+        <div class="row">
+            <div>
+                <div class="logo">
+                    <img src="logo.png">
+                </div>
+            </div>
+            <div class="searchbar">
+                <input type="text" placeholder="Search Here" id="locationbar">
+                <button id="locationbutton" onclick="myFunction()"> Search</button>
+            </div>
+        </div>
+        <div>
+            <ul class="main-nav1">
+            </ul>
+             <ul class="main-nav2">
+                <li class="active"><a href="index.html"> HOME </a></li>
+			</ul>
+        </div>
+        <p id="LocWD"></p>
+        <script>
+        function addHeader() {
+            var table1 = document.getElementById("table1");
+            var n_tr = document.createElement("tr");
+            var time_td = document.createElement("th");
+            time_td.innerHTML = "Time";
+            var name_td = document.createElement("th");
+            name_td.innerHTML = "Location";
+            var photo_td = document.createElement("th");
+            photo_td.innerHTML = "Photo";
+            n_tr.appendChild(name_td);
+            n_tr.appendChild(time_td);
+            n_tr.appendChild(photo_td);
+            table1.appendChild(n_tr);
+        }
+        
+        function addRow(report, pic) {
+            var x = document.getElementById("locationbar").value;
+            var table1 = document.getElementById("table1");
+            var n_tr = document.createElement("tr");
+            var time_td = document.createElement("td");
+            var timestamp = report.creationTime; /*new Date(report.timestamp).toTimeString().split(" ")[0].split(":");*/
+            time_td.innerHTML = timestamp;
+            var name_td = document.createElement("td");
+            name_td.innerHTML = x;
+
+            n_tr.appendChild(name_td);
+
+            n_tr.appendChild(time_td);
+            n_tr.appendChild(pic);
+
+
+            n_tr.id = x + "" + new Date().toTimeString().split(" ")[0].replace(/:/g, "");
+            table1.appendChild(n_tr);
+		}
+        
+        function myFunction() {
+            var table1 = document.getElementById("table1");
+            table1.innerHTML = "";
+            addHeader();
+            
+            var x = document.getElementById("locationbar").value;
+            var url = "http://weather-api.sulekha.rocks:8080/locations-photos/search-location-photos-sorted?searchquery=" + x;
+            url = url.trim();
+            $.get(url).then(function (response) {
+            	console.log(response);
+            	
+            	for(var i=0;i<response.length;i++){
+            		var piclist = response[i].url.split(',');
+            		
+            		for(var q=0; q<piclist.length;q++){
+            			var oHer = document.createElement("img");
+            			oHer.src = piclist[q];
+            			//oHer.height='20';
+            			//oHer.height = '100px';
+            			//oHer.setAttribute('width', '5');
+            			addRow(response[i], oHer);
+            			//document.getElementById('container').appendChild(oHer);
+            		}
+            	}
+            
+			});
+        }
+        </script>
+                <table id="table1"></table>
+     
+    	<div id="container"></div>
+    </header>
+</body>
+</html>

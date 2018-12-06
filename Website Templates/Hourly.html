@@ -23,14 +23,18 @@
         <div>
             <ul class="main-nav1">
                 <li class="active"><a href="index.html"> HOME </a></li>
-                <li><a href="HOURLY.html"> HOURLY </a></li>
+                <li><a href="Hourly.html"> HOURLY </a></li>
                 <li><a href="FiveDay.html"> 5 DAY </a></li>
                 <li><a href="TenDay.html"> 10 DAY </a></li>
+				<li><a href="HistWeath.html"> HIST WEATHER </a></li>
+				<li><a href="flu.html"> FLU TRACK </a> </li>
             </ul>
-             <ul class="main-nav2">
-                <li><a href="registration.html"> LOGIN </a> </li>
+            <ul class="main-nav2">
 				<li><a href="radar.html"> RADAR </a> </li>
 				<li><a href="classic.html"> CLASSIC </a> </li>
+				<li><a href="usersubfor.html"> USWF </a> </li>
+				<li><a href="timeline.html"> PTIME </a> </li>
+				<li><a href="registration.html"> LOGIN </a> </li>
 			</ul>
         </div>
         <p id="LocWD"></p>
@@ -54,6 +58,8 @@
                 temp_pp_td.innerHTML = "Precipitation Probability";
                 var temp_feelslike_td = document.createElement("th");
                 temp_feelslike_td.innerHTML = "Temp Feels Like";
+				var temp_snow_td = document.createElement("th");
+                temp_snow_td.innerHTML = "Skiing";
 				var temp_summary_td = document.createElement("th");
                 temp_summary_td.innerHTML = "Summary";
                 n_tr.appendChild(time_td);
@@ -63,6 +69,7 @@
                 n_tr.appendChild(temp_ws_td);
 				n_tr.appendChild(temp_pp_td);
                 n_tr.appendChild(temp_feelslike_td);
+				n_tr.appendChild(temp_snow_td);
 				n_tr.appendChild(temp_summary_td);
                 table1.appendChild(n_tr);
             }
@@ -85,6 +92,14 @@
                 temp_pp_td.innerHTML = report.precipitation_probability;
                 var temp_feelslike_td = document.createElement("td");
                 temp_feelslike_td.innerHTML = report.temp_feels_like;
+				var temp_snow_td = document.createElement("td");
+             //   temp_snow_td.innerHTML = report.is_snow;
+				if(report.is_snow==false)
+					{
+						temp_snow_td.innerHTML = "Not today";
+					}
+					else
+						temp_snow_td.innerHTML = "Enjoy Skiing";
 				var temp_summary_td = document.createElement("td");
                 temp_summary_td.innerHTML = report.summary;
                 n_tr.appendChild(time_td);
@@ -94,10 +109,11 @@
                 n_tr.appendChild(temp_ws_td);
 				n_tr.appendChild(temp_pp_td);
                 n_tr.appendChild(temp_feelslike_td);
+				n_tr.appendChild(temp_snow_td);
 				n_tr.appendChild(temp_summary_td);
                 n_tr.id = x + "" + new Date().toTimeString().split(" ")[0].replace(/:/g, "");
                 table1.appendChild(n_tr);
-            }
+			}
             function myFunction() {
                 var x = document.getElementById("locationbar").value;
                 var url = "http://weather-api.sulekha.rocks:8080/hourly/" + x;
@@ -108,14 +124,22 @@
                     table1.innerHTML = "";
                     addHeader();
                     var new_response = { "reports": {} }
-                    var time = new Date();
+					var time = new Date();
                     time.setHours(time.getHours() + 12);
                     for (var i = 0; i < response.reports.length; i++) {
-                        var date = new Date(response.reports[i].timestamp);
-                        if (date < time) {
-                            addRow(response.reports[i]);
-                        }
-                    }
+					if(response.reports[i].coords.latitude=="39.78373" && response.reports[i].coords.longitude=="-100.445882")
+					{
+					alert('City entered does not exist');
+					break;
+					}
+					else
+					{
+							var date = new Date(response.reports[i].timestamp);
+							if (date < time) {
+								addRow(response.reports[i]);
+							}
+					}
+					}
                 }); 
             }
         </script>

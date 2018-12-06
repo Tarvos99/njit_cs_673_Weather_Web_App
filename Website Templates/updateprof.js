@@ -3,13 +3,13 @@ $(document).ready(function() {
 			var order ={
                 		name: {
                 			firstName: $("#name").val(),
-                			middleName: null,
+                			middleName:null,
                 			lastName: null,
                 		},
                 		email: $("#email").val(),
                 		addresses: {
                 			HomeAddress: {
-                				street: null,
+                				street:  $("#city").val(),
                 				apartment: null,
                 				city: null,
                 				state: null,
@@ -37,10 +37,18 @@ $(document).ready(function() {
                 		},
                 		favouriteCities: [$("#favcity").val()],
                 		//profilePhoto: $("#profilepicture").val(),
+						markSafe: $("#MS").val(),
                 };
 			var x = document.getElementById("email").value;
 			var urlval = "http://weather-api.sulekha.rocks:8080/userprofile/update-user-profile/" + x +"/";
 			urlval = urlval.trim();
+			
+			
+			var form = new FormData();
+			form.append("City", $("#city").val());
+			form.append("Url", $("#profilepicture").val());
+		
+			
 			$.ajax({
                 	type: 'PUT',
                 	url: urlval,
@@ -57,8 +65,23 @@ $(document).ready(function() {
                 		alert('Unable to update profile at this time');
                 		console.log(response);
                 	}
+                }),
+
+			$.ajax({
+                	type: 'POST',
+                	url: "http://weather-api.sulekha.rocks:8080/locations-photos/upload-location-photo",
+                	data: form,
+                	contentType: false,
+                	processData: false,
+                	success: function(response){
+                		alert('successfully uploaded photo urls');
+                		console.log(response);
+                	},
+                	error: function(response){
+                		alert('Unable to upload photo urls at this time');
+                		console.log(response);
+                	}
                 });
-			
 			/*var volcano= new FormData();
 			
 			var locationPhoto;

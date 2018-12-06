@@ -22,9 +22,6 @@
               </div>
           </div>
           <div>
-          <ul class="main-nav1">
-              
-          </ul>
           <ul class="main-nav2">
 				<li class="active"><a href="index.html"> HOME </a></li>
           </ul>
@@ -50,6 +47,8 @@
                 temp_pp_td.innerHTML = "Precipitation Probability";
                 var temp_feelslike_td = document.createElement("th");
                 temp_feelslike_td.innerHTML = "Temp Feels Like";
+				var temp_snow_td = document.createElement("th");
+                temp_snow_td.innerHTML = "Skiing";
 				var temp_summary_td = document.createElement("th");
                 temp_summary_td.innerHTML = "Summary";
                 n_tr.appendChild(name_td);
@@ -59,6 +58,7 @@
                 n_tr.appendChild(temp_ws_td);
 				n_tr.appendChild(temp_pp_td);
                 n_tr.appendChild(temp_feelslike_td);
+				n_tr.appendChild(temp_snow_td);
 				n_tr.appendChild(temp_summary_td);
                 table1.appendChild(n_tr);
             }
@@ -94,6 +94,14 @@
                     temp_pp_td.innerHTML = response.report.precipitation_probability;
                     var temp_feelslike_td = document.createElement("td");
                     temp_feelslike_td.innerHTML = response.report.temp_feels_like;
+					var temp_snow_td = document.createElement("td");
+                    //temp_snow_td.innerHTML = response.report.is_snow;
+					if(response.report.is_snow==false)
+					{
+						temp_snow_td.innerHTML = "Not today";
+					}
+					else
+						temp_snow_td.innerHTML = "Enjoy Skiing";
 					var temp_summary_td = document.createElement("td");
                     temp_summary_td.innerHTML = response.report.summary;
                     n_tr.appendChild(name_td);
@@ -103,6 +111,7 @@
                     n_tr.appendChild(temp_ws_td);
     				n_tr.appendChild(temp_pp_td);
                     n_tr.appendChild(temp_feelslike_td);
+					n_tr.appendChild(temp_snow_td);
     				n_tr.appendChild(temp_summary_td);
                     table1.appendChild(n_tr);             	             	
                 });

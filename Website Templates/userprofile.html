@@ -33,7 +33,9 @@
                 var row2=document.getElementById("srow");
                 var row3=document.getElementById("trow");
                 var row4=document.getElementById("forow");                   
-                var row5=document.getElementById("fihrow");                    
+                var row5=document.getElementById("fihrow");   
+                var row6=document.getElementById("sihrow");     
+
 
 			          
 							var myJSON = JSON.stringify(hey);
@@ -48,6 +50,15 @@
 							}
 							var namefull = myJSON.slice(namef,endnamef);
 							console.log(namefull);
+							
+							<!-- find fav city stored at homeaddress.street-->
+							var curf= myJSON.indexOf("HomeAddress");
+							var endcurf=curf;
+							while(myJSON.charAt(endcurf)!==","){
+								endcurf++;
+							}
+							var curfull = myJSON.slice(curf,endcurf);
+							console.log(curfull);
 							
 							<!-- find email -->
 							var emailf= myJSON.indexOf("email");
@@ -67,22 +78,38 @@
 							
 							<!-- find photo urls stored in workaddress.street-->
 							var photof=myJSON.indexOf("WorkAddress");
-							var endphoto = photof;
-							while(myJSON.charAt(endphoto)!=="}"){
-								endphoto++;
+							//var photoend=myJSON.indexOf(',"locationCoordinatesRest');
+							var photoend = photof;
+							while(myJSON.charAt(photoend)!=="}"){
+								photoend++;
 							}
-							var photofull = myJSON.slice(photof,endphoto);
+							var photofull = myJSON.slice(photof,photoend);
 							console.log(photofull);
+							
+							<!-- find marked safe -->
+							var safef= myJSON.indexOf("markSafe");
+							var endsafe = safef;
+							while(myJSON.charAt(endsafe)!=="}"){
+								endsafe++;
+							}
+							var safefull = myJSON.slice(safef,endsafe);
+							console.log(safefull);
 							
 							
 							<!-- clean up strings-->
 							
 							var namstr = namefull.replace('name":{"firstName":"','');
 							var namstr2=namstr.replace('","middleName":null,"lastName":null','');
-							console.log(namstr2);
+							var namstr3= namstr2.replace('"','')
+							console.log(namstr3);
 							
 							var emlstr = emailfull.replace('email":"','');
 							console.log(emlstr);
+							
+							var curstr = curfull.replace('HomeAddress":{"street":"','');
+							var curstr2= curstr.replace('"','');
+							var curstr3= curstr2.replace('HomeAddress:{"locationCoordinatesRest":{}}','');
+							console.log(curstr3);
 							
 							var citstr = cityfull.replace('favouriteCities":["','');
 							var citstr2 = citstr.replace(':[','');
@@ -91,28 +118,45 @@
 							console.log(citstr4);
 							
 							var photstr = photofull.replace('WorkAddress":{"street":"','');
-							var photstr2 = photstr.replace('{"longitude":null,"latitude":null','');
+							var photstr8 = photstr.replace('WorkAddress','');
+							var photstr17= photstr8.replace(':{"locationCoordinatesRest":{','');
+							var photstr9 = photstr17.replace(',"locationCoordinatesRest":{','');
+							var photstr2 = photstr9.replace('{"longitude":null,"latitude":null','');
 							var photstr3= photstr2.replace('","apartment":null,"city":null,"state":null,"zipCode":null,"phoneNumber":null,"country":null,"locationCoordinatesRest":','');
 							var photstr4 = photstr3.replace('WorkAddress":{"street":null,"apartment":null,"city":null,"state":null,"zipCode":null,"phoneNumber":null,"country":null,"locationCoordinatesRest":','');
-							console.log(photstr4);	
+							var photstr5= photstr4.replace('"','');
+							console.log(photstr5);	
+							
+							var safestr = safefull.replace('markSafe":','');
+							var safestr2= null;
+							if(safestr=='false'){
+								safestr2="That's a negative Captain";
+							}
+							else{
+								safestr2="Affirmative Captain";
+							}
+							console.log(safestr);
 							
 							
-		                    var pwd_td = document.createElement("td");
-		                    pwd_td.innerHTML = cool[2];
+		                    var safe_td = document.createElement("td");
+		                    safe_td.innerHTML = safestr2;
 		                    var full_name_td = document.createElement("td");
-		                    full_name_td.innerHTML = namstr2;
+		                    full_name_td.innerHTML = namstr3;
 		                    var email_td = document.createElement("td");
 		                    email_td.innerHTML = emlstr;
 		                    var fav_city_td = document.createElement("td");
 		                    fav_city_td.innerHTML= citstr4;
 		                    var photo_url_td = document.createElement("td");
-		                    photo_url_td.innerHTML=photstr4;
+		                    photo_url_td.innerHTML=photstr5;
+		                    var cur_city_td = document.createElement("td");
+		                    cur_city_td.innerHTML=curstr3;
 		 
 		                    row1.appendChild(full_name_td);
 		                    row2.appendChild(email_td);
-		                  //  row3.appendChild(pwd_td);
+		                  	row3.appendChild(safe_td);
 		                    row4.appendChild(fav_city_td);
 		                    row5.appendChild(photo_url_td);
+		                    row6.appendChild(cur_city_td);
 			});
         </script> 
 		<div>
@@ -124,17 +168,21 @@
 					<tr id="srow">
 						<td id="user_email">Email</td>
 					</tr>	
-					<!--<tr id="trow">
-						<td id="user_pwd">Password</td>
-					</tr>--> 				
+					<tr id="trow">
+						<td id="msafe">Are you Safe?</td>
+					</tr>	
+					<tr id="sihrow">
+						<td id="curcit">Current City</td>
+					</tr>			
 				</thead>
 				<tbody>
 					<tr id="forow">
-						<td>Favorite City</td>
+						<td>Favorite Cities</td>
 					</tr>
 					<tr id="fihrow">
 						<td>Photo URLs</td>
 					</tr>
+					
 				</tbody>
 		
 			</table>
@@ -187,7 +235,17 @@
                     var url = "http://weather-api.sulekha.rocks:8080/now/" + x;
                     url = url.trim();
                     $.get(url).then(function (response) {
-                        var table1 = document.getElementById("table1");
+        				if(response.report.coords.latitude=="39.78373" && response.report.coords.longitude=="-100.445882")
+        				{
+        					//alert('City entered does not exist');
+        				}
+        				else
+        				{
+        					if(response.report.alerts!=null)
+        					{
+        						alert('There is severe weather advisory in '+ x);
+        					}
+                    	var table1 = document.getElementById("table1");
                         var n_tr = document.createElement("tr");
                         var name_td = document.createElement("td");
                         name_td.innerHTML = response.report.name;
@@ -208,6 +266,7 @@
                         n_tr.appendChild(temp_feelslike_td);
     					n_tr.appendChild(temp_summary_td);
                         table1.appendChild(n_tr);
+        				}
                     });
                 }
 
@@ -230,15 +289,15 @@
 		var photstr2 = photstr.replace('{"longitude":null,"latitude":null','');
 		var photstr3= photstr2.replace('","apartment":null,"city":null,"state":null,"zipCode":null,"phoneNumber":null,"country":null,"locationCoordinatesRest":','');
 		var photstr4 = photstr3.replace('WorkAddress":{"street":null,"apartment":null,"city":null,"state":null,"zipCode":null,"phoneNumber":null,"country":null,"locationCoordinatesRest":','');
+		var photstr5= photstr4.replace('"','');
 
 		
-		var piclist = photstr4.split(',');
+		var piclist = photstr5.split(',');
 		
 		var i;
-		for(i=0; i < piclist.length; i++){
+		for(i=0; i < piclist.length-1; i++){
 			var oHer = document.createElement("img");
 			oHer.src = piclist[i];
-			console.log("made it")
 			//oHer.height='20';
 			//oHer.height = '100px';
 			//oHer.setAttribute('width', '5');
@@ -251,6 +310,7 @@
         <table id="table1"></table>
     </header>
     	<div id="container"></div>
-    			<p class="message">Want to Update Profile Info, Add Favourite Cities, or Upload Photos? <a href="updateprof.html">Click Here</a> </p>	
+    <p class="message">Want to Update Profile Info, Add Favourite Cities, or Upload Photos? <a href="updateprof.html">Click Here</a> </p>	
+    <p class="message">How about submitting your own Weather Forecast Data? <a href="boots.html">Click Here</a> </p>	
 </body>
 </html>

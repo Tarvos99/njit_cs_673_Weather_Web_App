@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        User-Submitted Forecast Data
+    </title>
+    <link href="usersubforstyle.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <header>
+        <div class="row">
+            <div>
+                <div class="logo">
+                    <img src="logo.png">
+                </div>
+            </div>
+            <div class="searchbar">
+                <input type="text" placeholder="Search Here" id="locationbar">
+                <button id="locationbutton" onclick="myFunction()"> Search</button>
+            </div>
+        </div>
+        <div>
+            <ul class="main-nav1">
+            </ul>
+             <ul class="main-nav2">
+                <li class="active"><a href="index.html"> HOME </a></li>
+
+			</ul>
+        </div>
+        <p id="LocWD"></p>
+        <script>
+            var temperatures = {};
+            var first = true;
+            function addHeader() {
+                var table1 = document.getElementById("table1");
+                var n_tr = document.createElement("tr");
+                var time_td = document.createElement("th");
+                time_td.innerHTML = "Time";
+                var name_td = document.createElement("th");
+                name_td.innerHTML = "Name";
+				var temp_summary_td = document.createElement("th");
+                temp_summary_td.innerHTML = "Summary";
+                n_tr.appendChild(time_td);
+                n_tr.appendChild(name_td);
+				n_tr.appendChild(temp_summary_td);
+                table1.appendChild(n_tr);
+            }
+            function addRow(report) {
+                var x = document.getElementById("locationbar").value;
+                var table1 = document.getElementById("table1");
+                var n_tr = document.createElement("tr");
+                var time_td = document.createElement("td");
+                var timestamp = new Date(report.zonedDateTimeRest);
+                time_td.innerHTML = timestamp;
+                var name_td = document.createElement("td");
+                name_td.innerHTML = x;
+				var temp_summary_td = document.createElement("td");
+                temp_summary_td.innerHTML = report.weatherUpdateRest;
+                n_tr.appendChild(time_td);
+                n_tr.appendChild(name_td);
+				n_tr.appendChild(temp_summary_td);
+                n_tr.id = x + "" + new Date().toTimeString().split(" ")[0].replace(/:/g, "");
+                table1.appendChild(n_tr);
+            }
+            function myFunction() {
+                var x = document.getElementById("locationbar").value;
+                var url = "http://weather-api.sulekha.rocks:8080/realtimeWeatherUpdate/get-weather-update/" + x;
+                url = url.trim();
+                $.get(url).then(function (response) {
+                    // delete existing rows
+                    var table1 = document.getElementById("table1");
+                    table1.innerHTML = "";
+                    addHeader();
+                    var time = new Date();
+                    time.setHours(time.getHours() + 12);
+                    for (var i = 0; i < response.length; i++) {
+                        var date = new Date(response[i].zonedDateTimeRest);
+                        if (date < time) {
+                            addRow(response[i]);
+                        }
+                    }
+                }); 
+            }
+        </script>
+        <table id="table1">
+        </table>
+    </header>
+</body>
+</html>

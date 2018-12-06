@@ -9,7 +9,7 @@ $(document).ready(function() {
                 		email: $("#email").val(),
                 		addresses: {
                 			HomeAddress: {
-                				street: null,
+                				street:  $("#city").val(),
                 				apartment: null,
                 				city: null,
                 				state: null,
